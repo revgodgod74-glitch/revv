@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rev's Shop | Add to Cart + LTC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        /* ===== THEME VARIABLES ===== */
+        :root {
+            /* Dark Theme (Default) */
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #14141f;
+            --bg-card: #1e1e2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c0;
+            --text-muted: #707090;
+            --border-color: #2a2a3a;
+            --accent: #6c5ce7;
+            --accent-glow: #8b7cf0;
+            --accent-purple: #a58eff;
+            --success: #00d68f;
+            --warning: #ffaa00;
+            --danger: #ff5c5c;
+            --shadow-color: rgba(108, 92, 231, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f0f0f8;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #7a7a9a;
+            --border-color: #e0e0f0;
+            --accent: #6c5ce7;
+            --accent-glow: #8b7cf0;
+            --shadow-color: rgba(108, 92, 231, 0.15);
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 60px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .theme-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            background: transparent;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .theme-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+            background: var(--bg-card);
+            border-radius: 40px;
+            border: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6c5ce7, #a58eff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, #ff8a5c, #ff5c8a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cart-icon {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            cursor: pointer;
+            background: var(--bg-primary);
+            padding: 15px 25px;
+            border-radius: 60px;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .cart-icon:hover {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .cart-count {
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 30px;
+            padding: 30px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px -15px var(--accent);
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .product-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .product-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .product-price small {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .product-desc {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .add-to-cart-btn:hover {
+            background: var(--accent-glow);
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .cart-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-content {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 40px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-cart {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+
+        .close-cart:hover {
+            color: var(--danger);
+        }
+
+        .cart-title {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+
+        .cart-items {
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .cart-item-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .quantity-btn {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .item-quantity {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-item {
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: transform 0.3s;
+        }
+
+        .remove-item:hover {
+            transform: scale(1.2);
+        }
+
+        .cart-total {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: right;
+            margin: 30px 0;
+            padding-top: 20px;
+            border-top: 3px solid var(--border-color);
+        }
+
+        .cart-total span {
+            color: var(--accent);
+        }
+
+        /* Checkout Section */
+        .checkout-section {
+            margin-top: 30px;
+            padding: 30px;
+            background: var(--bg-card);
+            border-radius: 30px;
+            border: 2px solid var(--border-color);
+        }
+
+        .checkout-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ltc-address-box {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .ltc-address {
+            font-family: monospace;
+            font-size: 1.2rem;
+            color: var(--accent);
+            word-break: break-all;
+        }
+
+        .copy-address-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .copy-address-btn:hover {
+            background: var(--accent-glow);
+            transform: scale(1.05);
+        }
+
+        .payment-info {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid var(--accent);
+        }
+
+        .payment-steps {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .payment-steps li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+        }
+
+        .payment-steps li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px var(--shadow-color);
+        }
+
+        .checkout-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 60px;
+            font-weight: 600;
+            z-index: 3000;
+            animation: slideUp 0.3s;
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        @keyframes slideUp {
+            from { bottom: -100px; opacity: 0; }
+            to { bottom: 20px; opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 3rem;
+            }
+            
+            .cart-icon {
+                position: static;
+                margin-top: 20px;
+                justify-content: center;
+            }
+            
+            .ltc-address-box {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn active" onclick="setTheme('dark')">🌙 Dark</button>
+        <button class="theme-btn" onclick="setTheme('light')">☀️ Light</button>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>rev's <span>shop</span></h1>
+            <div class="cart-icon" onclick="openCart()">
+                🛒 <span class="cart-count" id="cartCount">0</span>
+            </div>
+            <p style="color: var(--text-secondary); margin-top: 10px;">add to cart → pay with litecoin</p>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-name">🔥 main sets that rev use against everyone</div>
+                <div class="product-price">$10 <small>USD</small></div>
+                <div class="product-desc">⚡ Pro edition • Unlimited use • Lifetime access • Undetectable</div>
+                <button class="add-to-cart-btn" onclick="addToCart(1, 'Main Sets', 10)">
+                    🛒 Add to Cart
+                </button>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-name">📚 panbooks with methods</div>
+                <div class="product-price">$5 <small>USD</small></div>
+                <div class="product-desc">📖 50+ methods • Step by step • 2024 updated • Working</div>
+                <button class="add-to-cart-btn" onclick="addToCart(2, 'Panbooks', 5)">
+                    🛒 Add to Cart
+                </button>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-name">🎯 secret spots hard to counter</div>
+                <div class="product-price">$4 <small>USD</small></div>
+                <div class="product-desc">🤫 Undetectable • Private • Hard to counter • Exclusive</div>
+                <button class="add-to-cart-btn" onclick="addToCart(3, 'Secret Spots', 4)">
+                    🛒 Add to Cart
+                </button>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-name">🎨 custom filter sets</div>
+                <div class="product-price">$3 <small>USD</small></div>
+                <div class="product-desc">🌈 100+ filters • Adjustable • Premium quality</div>
+                <button class="add-to-cart-btn" onclick="addToCart(4, 'Custom Filters', 3)">
+                    🛒 Add to Cart
+                </button>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-name">🎵 reverbs</div>
+                <div class="product-price">$3 <small>USD</small></div>
+                <div class="product-desc">🔊 Studio quality • 20 presets • Professional</div>
+                <button class="add-to-cart-btn" onclick="addToCart(5, 'Reverbs', 3)">
+                    🛒 Add to Cart
+                </button>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card">
+                <div class="product-name">🔊 bass method</div>
+                <div class="product-price">$2 <small>USD</small></div>
+                <div class="product-desc">💪 Deep bass • Easy setup • Working 100%</div>
+                <button class="add-to-cart-btn" onclick="addToCart(6, 'Bass Method', 2)">
+                    🛒 Add to Cart
+                </button>
+            </div>
+        </div>
+
+        <!-- Cart Modal -->
+        <div class="cart-modal" id="cartModal">
+            <div class="cart-content">
+                <span class="close-cart" onclick="closeCart()">&times;</span>
+                <h2 class="cart-title">🛒 Your Cart</h2>
+                
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items will be inserted here -->
+                </div>
+
+                <div class="cart-total" id="cartTotal">
+                    Total: $<span>0</span>
+                </div>
+
+                <!-- Checkout Section - LTC Payment -->
+                <div class="checkout-section">
+                    <div class="checkout-title">
+                        <span>💰</span> Pay with Litecoin (LTC)
+                    </div>
+
+                    <div class="ltc-address-box">
+                        <span class="ltc-address" id="ltcAddress">LLoHyp4sNLZMJ8Dof2KMkRMDvERof6idz8</span>
+                        <button class="copy-address-btn" onclick="copyLTCAddress()">
+                            📋 Copy Address
+                        </button>
+                    </div>
+
+                    <div class="payment-info">
+                        <p style="font-weight: 600; margin-bottom: 10px;">📝 Payment Instructions:</p>
+                        <ul class="payment-steps">
+                            <li>Send exact amount in LTC to above address</li>
+                            <li>LTC = Litecoin (ERC20 nahi, LTC network)</li>
+                            <li>After payment, take screenshot</li>
+                            <li>Contact @rev for instant delivery</li>
+                        </ul>
+                        <p style="color: var(--accent); margin-top: 15px; font-size: 1.1rem;">
+                            ⚡ Network: LTC (Litecoin)
+                        </p>
+                    </div>
+
+                    <button class="checkout-btn" onclick="checkout()" id="checkoutBtn">
+                        ✅ I've Sent Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification" style="display: none;"></div>
+
+    <script>
+        // Cart array
+        let cart = [];
+
+        // Load cart from localStorage
+        function loadCart() {
+            const savedCart = localStorage.getItem('revShopCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+            updateCartDisplay();
+        }
+
+        // Save cart to localStorage
+        function saveCart() {
+            localStorage.setItem('revShopCart', JSON.stringify(cart));
+        }
+
+        // Add to cart function
+        function addToCart(id, name, price) {
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            saveCart();
+            updateCartDisplay();
+            showNotification(`✅ ${name} added to cart!`);
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            // Update cart count
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+
+            // Update cart items in modal
+            const cartItemsDiv = document.getElementById('cartItems');
+            if (cartItemsDiv) {
+                if (cart.length === 0) {
+                    cartItemsDiv.innerHTML = '<p style="text-align: center; padding: 40px; color: var(--text-muted);">🛒 Cart is empty</p>';
+                } else {
+                    let html = '';
+                    cart.forEach(item => {
+                        html += `
+                            <div class="cart-item">
+                                <div class="cart-item-info">
+                                    <h4>${item.name}</h4>
+                                    <div class="cart-item-price">$${item.price} each</div>
+                                </div>
+                                <div class="cart-item-actions">
+                                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                                    <span class="item-quantity">${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                                    <span class="remove-item" onclick="removeFromCart(${item.id})">🗑️</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    cartItemsDiv.innerHTML = html;
+                }
+            }
+
+            // Update total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('cartTotal').innerHTML = `Total: $<span>${total.toFixed(2)}</span>`;
+        }
+
+        // Update quantity
+        function updateQuantity(id, newQuantity) {
+            if (newQuantity < 1) {
+                removeFromCart(id);
+                return;
+            }
+            
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                item.quantity = newQuantity;
+                saveCart();
+                updateCartDisplay();
+            }
+        }
+
+        // Remove from cart
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            saveCart();
+            updateCartDisplay();
+            showNotification('🗑️ Item removed from cart');
+        }
+
+        // Open cart modal
+        function openCart() {
+            document.getElementById('cartModal').classList.add('active');
+            updateCartDisplay();
+        }
+
+        // Close cart modal
+        function closeCart() {
+            document.getElementById('cartModal').classList.remove('active');
+        }
+
+        // Copy LTC address
+        function copyLTCAddress() {
+            const address = 'LLoHyp4sNLZMJ8Dof2KMkRMDvERof6idz8';
+            navigator.clipboard.writeText(address).then(() => {
+                showNotification('📋 LTC Address copied!');
+            });
+        }
+
+        // Checkout function
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('❌ Cart is empty!');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const message = `
+✅ Payment Confirmation
+
+Amount: $${total} USD (in LTC)
+LTC Address: LLoHyp4sNLZMJ8Dof2KMkRMDvERof6idz8
+
+Products:
+${cart.map(item => `- ${item.name} x${item.quantity} = $${item.price * item.quantity}`).join('\n')}
+
+📸 Please send screenshot after payment!
+            `;
+            
+            showNotification('✅ Payment confirmation sent! Check instructions');
+            
+            // Open in new window with payment details
+            const paymentWindow = window.open('', '_blank');
+            paymentWindow.document.write(`
+                <html>
+                <head>
+                    <title>Payment Instructions - Rev's Shop</title>
+                    <style>
+                        body { font-family: Arial; padding: 40px; background: #0a0a0f; color: white; }
+                        .container { max-width: 600px; margin: 0 auto; }
+                        .address { background: #1e1e2d; padding: 20px; border-radius: 10px; word-break: break-all; }
+                        button { padding: 15px 30px; background: #6c5ce7; color: white; border: none; border-radius: 10px; cursor: pointer; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>💎 Payment Instructions</h1>
+                        <p>Send <strong>${total} USD worth LTC</strong> to:</p>
+                        <div class="address">
+                            LLoHyp4sNLZMJ8Dof2KMkRMDvERof6idz8
+                        </div>
+                        <p style="margin: 20px 0;">✅ After payment, contact @rev with screenshot</p>
+                        <button onclick="window.close()">Close</button>
+                    </div>
+                </body>
+                </html>
+            `);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Theme set
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Initialize
+        loadCart();
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target === modal) {
+                closeCart();
+            }
+        }
+    </script>
+
+    <!-- Floating LTC Badge -->
+    <div style="position: fixed; bottom: 20px; left: 20px; background: linear-gradient(135deg, #6c5ce7, #a58eff); color: white; padding: 12px 25px; border-radius: 60px; font-weight: 600; z-index: 999; box-shadow: 0 10px 30px rgba(108, 92, 231, 0.3);">
+        ⚡ LTC: LLoHyp4sNLZMJ8Dof2KMkRMDvERof6idz8
+    </div>
+</body>
+</html>
