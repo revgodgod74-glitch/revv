@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rev's Shop | Discord Chat = Money 💰</title>
+    <title>Rev's Shop | Earn From Discord + Ads</title>
     <style>
         * {
             margin: 0;
@@ -21,7 +21,6 @@
             --blue-neon: #5aa9ff;
             --cyan-glow: #7fc9ff;
             --discord-blue: #5865F2;
-            --discord-hover: #4752C4;
             --text-light: #ffffff;
             --text-dim: #b0d0f0;
             --glass-bg: rgba(10, 25, 47, 0.8);
@@ -37,7 +36,7 @@
             position: relative;
         }
 
-        /* Particles Background */
+        /* Particles */
         #particles-js {
             position: fixed;
             top: 0;
@@ -45,25 +44,92 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-medium) 50%, var(--blue-light) 100%);
         }
 
-        /* Main Container */
+        /* ===== ADS SECTION - TUJHE PAISA MILEGA ===== */
+        .ad-top {
+            width: 100%;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            padding: 10px;
+            text-align: center;
+            color: #000;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px #ffd700; }
+            50% { box-shadow: 0 0 40px #ffaa00; }
+        }
+
+        .ad-side-left {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            background: linear-gradient(135deg, #4a8aca, #5aa9ff);
+            padding: 20px 10px;
+            border-radius: 0 30px 30px 0;
+            text-align: center;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid #ffd700;
+        }
+
+        .ad-side-right {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            background: linear-gradient(135deg, #4a8aca, #5aa9ff);
+            padding: 20px 10px;
+            border-radius: 30px 0 0 30px;
+            text-align: center;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid #ffd700;
+        }
+
+        .ad-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+            border: 2px dashed #ffd700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ad-container:hover {
+            transform: scale(1.02);
+            background: rgba(255,215,0,0.2);
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        .ad-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        /* Main Container - Shifted for Ads */
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
             z-index: 1;
-        }
-
-        /* Glass Morphism */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--glass-border);
-            border-radius: 30px;
-            box-shadow: var(--shadow-glow);
         }
 
         /* Navbar */
@@ -89,47 +155,12 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-btn {
-            padding: 10px 20px;
-            border: 2px solid var(--glass-border);
-            border-radius: 60px;
-            background: transparent;
-            color: var(--text-light);
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .nav-btn:hover {
-            background: var(--blue-neon);
-            border-color: var(--blue-neon);
-            box-shadow: 0 0 20px var(--blue-neon);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 5px 20px;
-            background: var(--glass-bg);
-            border: 2px solid var(--glass-border);
-            border-radius: 60px;
-        }
-
         .wallet-balance {
             background: linear-gradient(135deg, #ffd700, #ffaa00);
             padding: 8px 20px;
             border-radius: 60px;
             color: #000;
             font-weight: 700;
-            font-size: 1.1rem;
         }
 
         /* Header */
@@ -141,13 +172,11 @@
             backdrop-filter: blur(10px);
             border: 3px solid var(--glass-border);
             border-radius: 60px;
-            position: relative;
         }
 
         .header h1 {
             font-size: 4rem;
             font-weight: 800;
-            margin-bottom: 10px;
         }
 
         .header h1 span {
@@ -156,51 +185,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .discord-badge {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            background: var(--discord-blue);
-            padding: 15px 30px;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .discord-badge:hover {
-            background: var(--discord-hover);
-            transform: scale(1.05);
-            box-shadow: 0 0 30px var(--discord-blue);
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .stat-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 25px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--blue-neon);
-        }
-
-        /* ===== DISCORD EARNINGS SECTION ===== */
+        /* ===== DISCORD EARNING SECTION ===== */
         .discord-earn-section {
             margin: 40px 0;
             padding: 40px;
@@ -210,28 +195,11 @@
             overflow: hidden;
         }
 
-        .discord-earn-section::before {
-            content: '💬';
-            position: absolute;
-            bottom: -20px;
-            right: -20px;
-            font-size: 150px;
-            opacity: 0.1;
-            transform: rotate(-15deg);
-        }
-
         .discord-title {
             font-size: 3rem;
             font-weight: 800;
             text-align: center;
             margin-bottom: 20px;
-        }
-
-        .discord-subtitle {
-            text-align: center;
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            color: rgba(255,255,255,0.9);
         }
 
         .discord-stats {
@@ -256,31 +224,6 @@
             margin-bottom: 10px;
         }
 
-        .discord-stat-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .chat-rate-box {
-            background: rgba(0,0,0,0.3);
-            border-radius: 40px;
-            padding: 30px;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .chat-rate {
-            font-size: 4rem;
-            font-weight: 800;
-            color: #ffd700;
-            margin: 20px 0;
-        }
-
-        .chat-rate small {
-            font-size: 1.5rem;
-            color: rgba(255,255,255,0.7);
-        }
-
         .connect-discord-btn {
             background: #ffd700;
             color: #000;
@@ -290,31 +233,17 @@
             font-size: 1.5rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
             margin: 20px auto;
-            display: inline-block;
+            display: block;
             border: 3px solid white;
         }
 
-        .connect-discord-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        /* Live Chat Feed */
+        /* Chat Feed */
         .chat-feed {
             background: rgba(0,0,0,0.3);
             border-radius: 40px;
             padding: 30px;
             margin-top: 30px;
-        }
-
-        .chat-feed-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .chat-messages {
@@ -330,30 +259,6 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .chat-avatar {
-            width: 40px;
-            height: 40px;
-            background: var(--discord-blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chat-info {
-            flex: 1;
-        }
-
-        .chat-user {
-            font-weight: 600;
-            color: #ffd700;
-        }
-
-        .chat-time {
-            font-size: 0.8rem;
-            opacity: 0.6;
-        }
-
         .chat-earned {
             color: #00ff88;
             font-weight: 600;
@@ -364,7 +269,6 @@
             margin: 40px 0;
             padding: 40px;
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
             border: 3px solid var(--blue-neon);
             border-radius: 60px;
         }
@@ -373,7 +277,6 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 25px;
-            margin-top: 30px;
         }
 
         .wallet-card {
@@ -397,7 +300,6 @@
             padding: 12px 25px;
             border-radius: 60px;
             cursor: pointer;
-            font-weight: 600;
             width: 100%;
         }
 
@@ -411,13 +313,6 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .bonus-amount {
-            font-size: 3rem;
-            color: #000;
-            font-weight: 800;
         }
 
         .claim-bonus-btn {
@@ -431,37 +326,7 @@
             cursor: pointer;
         }
 
-        /* Team Commission */
-        .team-section {
-            margin: 40px 0;
-            padding: 40px;
-            background: var(--glass-bg);
-            border: 3px solid #ffd700;
-            border-radius: 60px;
-        }
-
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .team-level {
-            background: rgba(0,0,0,0.3);
-            border: 2px solid #ffd700;
-            border-radius: 30px;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .level-percent {
-            font-size: 2.5rem;
-            color: #ffd700;
-            margin: 15px 0;
-        }
-
-        /* Products Grid */
+        /* Products */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -471,22 +336,15 @@
 
         .product-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
             border: 2px solid var(--glass-border);
             border-radius: 30px;
             padding: 30px;
         }
 
-        .product-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
         .product-price {
             font-size: 2.5rem;
             color: var(--blue-neon);
-            margin-bottom: 20px;
+            margin: 15px 0;
         }
 
         .add-to-cart-btn {
@@ -497,173 +355,148 @@
             border-radius: 60px;
             color: white;
             font-size: 1.1rem;
-            font-weight: 600;
             cursor: pointer;
         }
 
-        /* Modals */
-        .modal {
-            display: none;
+        /* Ad Revenue Counter */
+        .revenue-counter {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            padding: 20px 30px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(255,215,0,0.5);
+            border: 3px solid white;
+            animation: bounce 2s infinite;
         }
 
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--glass-bg);
-            border: 3px solid var(--blue-neon);
-            border-radius: 50px;
-            padding: 40px;
-            max-width: 450px;
-            width: 90%;
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         /* Notification */
         .notification {
             position: fixed;
-            bottom: 20px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--blue-neon);
             color: white;
             padding: 15px 30px;
             border-radius: 60px;
-            font-weight: 600;
-            z-index: 30000;
+            z-index: 10000;
             animation: slideUp 0.3s;
         }
 
         @keyframes slideUp {
             from { bottom: -100px; opacity: 0; }
-            to { bottom: 20px; opacity: 1; }
-        }
-
-        /* Responsive */
-        @media (max-width: 968px) {
-            .stats-bar,
-            .discord-stats,
-            .wallet-grid,
-            .team-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            to { bottom: 100px; opacity: 1; }
         }
 
         @media (max-width: 768px) {
-            .stats-bar,
-            .discord-stats,
-            .wallet-grid,
-            .team-grid {
-                grid-template-columns: 1fr;
+            .ad-side-left, .ad-side-right {
+                display: none;
             }
             
-            .header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .discord-badge {
-                position: static;
-                margin-top: 20px;
+            .container {
+                padding: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Particles -->
-    <div id="particles-js"></div>
+    <!-- ===== ADS - TUJHE PAISA MILEGA ===== -->
+    <div class="ad-top" onclick="adClick('top')">
+        <span class="ad-label">📢 AD</span>
+        <span> 🔥 Join Best Crypto Trading Platform - Get $50 Bonus! 🔥 </span>
+        <span class="ad-price">$0.05 per click</span>
+    </div>
 
+    <div class="ad-side-left" onclick="adClick('left')">
+        <div class="ad-container">
+            <div class="ad-label">📢 SPONSORED</div>
+            <div>🚀 Trade Crypto</div>
+            <div>💰 100x Leverage</div>
+            <div class="ad-price">$0.03/click</div>
+        </div>
+        <div class="ad-container" style="margin-top: 20px;" onclick="adClick('left2')">
+            <div class="ad-label">📢 AD</div>
+            <div>💎 Buy LTC Now</div>
+            <div>⚡ Best Rates</div>
+            <div class="ad-price">$0.04/click</div>
+        </div>
+    </div>
+
+    <div class="ad-side-right" onclick="adClick('right')">
+        <div class="ad-container">
+            <div class="ad-label">📢 PROMOTION</div>
+            <div>🎮 Play to Earn</div>
+            <div>💵 $1000 Prize</div>
+            <div class="ad-price">$0.03/click</div>
+        </div>
+        <div class="ad-container" style="margin-top: 20px;" onclick="adClick('right2')">
+            <div class="ad-label">📢 SPONSOR</div>
+            <div>📱 Best Wallet</div>
+            <div>🔐 Secure LTC</div>
+            <div class="ad-price">$0.04/click</div>
+        </div>
+    </div>
+
+    <!-- Revenue Counter -->
+    <div class="revenue-counter" id="revenueCounter">
+        💰 Total Earned: $<span id="totalRevenue">0.00</span>
+    </div>
+
+    <!-- Main Container -->
     <div class="container">
         <!-- Navbar -->
         <nav class="navbar">
             <div class="logo">rev's shop</div>
-            <div class="nav-links">
+            <div>
                 <span class="wallet-balance" id="walletBalance">$0.00</span>
-                <button class="nav-btn" onclick="showModal('login')">Login</button>
-                <button class="nav-btn" onclick="showModal('register')">Register</button>
-                <div class="user-info" id="userInfo" style="display: none;">
-                    <span id="userName"></span>
-                    <button class="nav-btn" onclick="logout()">Logout</button>
-                </div>
             </div>
         </nav>
 
         <!-- Header -->
         <header class="header">
             <h1>rev's <span>shop</span></h1>
-            <div class="discord-badge" onclick="showDiscordModal()">
-                <span>💬</span> 1 Chat = $0.20
-            </div>
-            <p style="color: var(--text-dim);">Join Discord & Earn Money While Chatting!</p>
+            <p style="color: var(--text-dim);">Join Discord → Tu kamaega | Ads → Tu kamaega</p>
         </header>
 
-        <!-- Stats -->
-        <div class="stats-bar">
-            <div class="stat-item">
-                <div class="stat-number" id="totalUsers">0</div>
-                <div>Total Users</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="totalEarned">$0</div>
-                <div>Total Paid</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="totalChats">0</div>
-                <div>Total Chats</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="activeUsers">0</div>
-                <div>Online Now</div>
-            </div>
-        </div>
-
-        <!-- ===== DISCORD EARNINGS SECTION ===== -->
+        <!-- ===== DISCORD EARNING SECTION ===== -->
         <div class="discord-earn-section">
-            <h2 class="discord-title">💬 JOIN DISCORD & EARN MONEY</h2>
-            <p class="discord-subtitle">Har message = $0.20 | Daily Payout | Instant Withdraw</p>
-
+            <h2 class="discord-title">💬 JOIN DISCORD & I WILL PAY YOU</h2>
+            
             <div class="discord-stats">
                 <div class="discord-stat-card">
-                    <div class="discord-stat-value" id="userMessages">0</div>
-                    <div class="discord-stat-label">Your Messages</div>
+                    <div class="discord-stat-value" id="totalMessages">0</div>
+                    <div>Total Messages</div>
                 </div>
                 <div class="discord-stat-card">
-                    <div class="discord-stat-value" id="userEarnings">$0</div>
-                    <div class="discord-stat-label">Your Earnings</div>
+                    <div class="discord-stat-value" id="yourEarnings">$0</div>
+                    <div>Your Earnings</div>
                 </div>
                 <div class="discord-stat-card">
-                    <div class="discord-stat-value" id="rankPosition">#0</div>
-                    <div class="discord-stat-label">Leaderboard Rank</div>
+                    <div class="discord-stat-value" id="activeUsers">0</div>
+                    <div>Active Users</div>
                 </div>
             </div>
 
-            <div class="chat-rate-box">
-                <h3>💰 CURRENT RATE</h3>
-                <div class="chat-rate">
-                    1 Chat = $0.20 <small>USD</small>
-                </div>
-                <button class="connect-discord-btn" onclick="connectDiscord()">
-                    🔗 CONNECT DISCORD
-                </button>
-            </div>
+            <button class="connect-discord-btn" onclick="connectDiscord()">
+                🔗 CONNECT DISCORD & START EARNING
+            </button>
 
             <!-- Live Chat Feed -->
             <div class="chat-feed">
-                <div class="chat-feed-title">
-                    <span>📡 LIVE CHAT FEED</span>
-                    <span style="color: #00ff88;">● Online</span>
-                </div>
+                <h3>📡 Live Activity</h3>
                 <div class="chat-messages" id="chatFeed">
-                    <!-- Messages will be added here -->
+                    <!-- Messages will appear here -->
                 </div>
             </div>
         </div>
@@ -673,19 +506,17 @@
             <h2 style="text-align: center;">💰 YOUR WALLET</h2>
             <div class="wallet-grid">
                 <div class="wallet-card">
-                    <h3>Available Balance</h3>
+                    <h3>Available</h3>
                     <div class="wallet-amount" id="availableBalance">$0.00</div>
-                    <button class="withdraw-btn" onclick="withdraw()">Withdraw</button>
+                    <button class="withdraw-btn" onclick="withdraw()">Withdraw to LTC</button>
                 </div>
                 <div class="wallet-card">
-                    <h3>Pending Earnings</h3>
-                    <div class="wallet-amount" id="pendingBalance">$0.00</div>
-                    <button class="withdraw-btn" onclick="refreshEarnings()">Refresh</button>
+                    <h3>From Discord</h3>
+                    <div class="wallet-amount" id="discordEarnings">$0.00</div>
                 </div>
                 <div class="wallet-card">
-                    <h3>Total Earned</h3>
-                    <div class="wallet-amount" id="totalEarnedWallet">$0.00</div>
-                    <button class="withdraw-btn" onclick="showHistory()">History</button>
+                    <h3>From Ads</h3>
+                    <div class="wallet-amount" id="adEarnings">$0.00</div>
                 </div>
             </div>
         </div>
@@ -694,293 +525,164 @@
         <div class="bonus-section">
             <div>
                 <h2>🎁 DAILY BONUS</h2>
-                <p>Login daily and claim your free money!</p>
+                <p>Roz free $0.50 lelo</p>
             </div>
             <div>
-                <span class="bonus-amount" id="dailyBonus">$0.50</span>
-                <button class="claim-bonus-btn" onclick="claimDailyBonus()">CLAIM NOW</button>
-            </div>
-        </div>
-
-        <!-- Team Commission -->
-        <div class="team-section">
-            <h2 style="text-align: center;">🤝 TEAM COMMISSION</h2>
-            <div class="team-grid">
-                <div class="team-level">
-                    <h3>Level 1</h3>
-                    <div class="level-percent">30%</div>
-                    <p>Direct Referrals</p>
-                    <div id="level1Count">0 members</div>
-                </div>
-                <div class="team-level">
-                    <h3>Level 2</h3>
-                    <div class="level-percent">10%</div>
-                    <p>Team Members</p>
-                    <div id="level2Count">0 members</div>
-                </div>
-                <div class="team-level">
-                    <h3>Level 3</h3>
-                    <div class="level-percent">5%</div>
-                    <p>Downline</p>
-                    <div id="level3Count">0 members</div>
-                </div>
+                <button class="claim-bonus-btn" onclick="claimDailyBonus()">CLAIM $0.50</button>
             </div>
         </div>
 
         <!-- Products -->
-        <h2 style="text-align: center; margin: 40px 0;">🛍️ PRODUCTS</h2>
+        <h2 style="text-align: center;">🛍️ PRODUCTS</h2>
         <div class="products-grid">
             <div class="product-card">
-                <div class="product-name">🔥 Main Sets</div>
+                <h3>🔥 Main Sets</h3>
                 <div class="product-price">$10</div>
-                <button class="add-to-cart-btn" onclick="addToCart(1, 'Main Sets', 10)">Add to Cart</button>
+                <button class="add-to-cart-btn" onclick="buy('Main Sets', 10)">Buy Now</button>
             </div>
             <div class="product-card">
-                <div class="product-name">📚 Panbooks</div>
+                <h3>📚 Panbooks</h3>
                 <div class="product-price">$5</div>
-                <button class="add-to-cart-btn" onclick="addToCart(2, 'Panbooks', 5)">Add to Cart</button>
+                <button class="add-to-cart-btn" onclick="buy('Panbooks', 5)">Buy Now</button>
             </div>
             <div class="product-card">
-                <div class="product-name">🎯 Secret Spots</div>
+                <h3>🎯 Secret Spots</h3>
                 <div class="product-price">$4</div>
-                <button class="add-to-cart-btn" onclick="addToCart(3, 'Secret Spots', 4)">Add to Cart</button>
+                <button class="add-to-cart-btn" onclick="buy('Secret Spots', 4)">Buy Now</button>
             </div>
         </div>
     </div>
 
-    <!-- Modals -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <h2 style="text-align: center;">🔐 LOGIN</h2>
-            <input type="text" id="loginUsername" placeholder="Username" style="width: 100%; padding: 15px; margin: 10px 0; border-radius: 60px; border: none;">
-            <input type="password" id="loginPassword" placeholder="Password" style="width: 100%; padding: 15px; margin: 10px 0; border-radius: 60px; border: none;">
-            <button class="withdraw-btn" onclick="login()" style="margin-top: 20px;">Login</button>
-        </div>
-    </div>
-
-    <div class="modal" id="discordModal">
-        <div class="modal-content">
-            <h2 style="text-align: center;">🔗 CONNECT DISCORD</h2>
-            <p style="text-align: center; margin: 20px 0;">Join our Discord server to start earning!</p>
-            <button class="connect-discord-btn" onclick="joinDiscord()" style="width: 100%;">Join Discord</button>
-        </div>
-    </div>
-
-    <!-- Particles JS -->
+    <!-- Particles -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Particles
+        // Initialize particles
         particlesJS('particles-js', {
             particles: {
                 number: { value: 100 },
                 color: { value: '#4a8aca' },
                 shape: { type: 'circle' },
-                opacity: { value: 0.5, random: true },
-                size: { value: 3, random: true },
+                opacity: { value: 0.5 },
+                size: { value: 3 },
                 line_linked: { enable: true, color: '#5aa9ff', opacity: 0.2 },
                 move: { enable: true, speed: 2 }
             }
         });
 
-        // ===== DISCORD EARNING SYSTEM =====
-        let currentUser = null;
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        let discordMessages = JSON.parse(localStorage.getItem('discordMessages')) || [];
+        // ===== REVENUE TRACKING - TUJHE PAISA =====
+        let totalRevenue = parseFloat(localStorage.getItem('totalRevenue')) || 0;
+        let adRevenue = parseFloat(localStorage.getItem('adRevenue')) || 0;
+        let discordRevenue = parseFloat(localStorage.getItem('discordRevenue')) || 0;
         
-        // Update stats
-        document.getElementById('totalUsers').textContent = users.length;
-        document.getElementById('totalChats').textContent = discordMessages.length;
-        document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 50) + 20;
-        
-        let totalEarned = discordMessages.reduce((sum, msg) => sum + 0.20, 0);
-        document.getElementById('totalEarned').textContent = '$' + totalEarned.toFixed(2);
-
-        // Simulate live chat feed
-        function addChatMessage(username, message) {
-            const chatFeed = document.getElementById('chatFeed');
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'chat-message';
-            msgDiv.innerHTML = `
-                <div class="chat-avatar">💬</div>
-                <div class="chat-info">
-                    <div><span class="chat-user">${username}</span> <span class="chat-time">just now</span></div>
-                    <div style="color: #fff;">${message}</div>
-                </div>
-                <div class="chat-earned">+$0.20</div>
-            `;
-            chatFeed.insertBefore(msgDiv, chatFeed.firstChild);
+        function updateRevenue() {
+            totalRevenue = adRevenue + discordRevenue;
+            localStorage.setItem('totalRevenue', totalRevenue);
+            localStorage.setItem('adRevenue', adRevenue);
+            localStorage.setItem('discordRevenue', discordRevenue);
             
-            if (chatFeed.children.length > 10) {
-                chatFeed.removeChild(chatFeed.lastChild);
-            }
+            document.getElementById('totalRevenue').textContent = totalRevenue.toFixed(2);
+            document.getElementById('walletBalance').textContent = '$' + totalRevenue.toFixed(2);
+            document.getElementById('availableBalance').textContent = '$' + totalRevenue.toFixed(2);
+            document.getElementById('adEarnings').textContent = '$' + adRevenue.toFixed(2);
+            document.getElementById('discordEarnings').textContent = '$' + discordRevenue.toFixed(2);
         }
 
-        // Simulate random chats
-        setInterval(() => {
-            const usernames = ['Rahul', 'Priya', 'Amit', 'Neha', 'Vikram', 'Rev', 'Raj', 'Simran'];
-            const messages = [
-                'Main sets ka link?',
-                'Payment done!',
-                'Thanks for quick delivery',
-                'How to earn more?',
-                'Discord server link?',
-                'Best shop ever!',
-                'Fast delivery ✅',
-                'Working method 🔥'
-            ];
+        // ===== ADS - HAR CLICK PE TUJHE PAISA =====
+        function adClick(position) {
+            // Different rates for different ad positions
+            let rates = {
+                'top': 0.05,
+                'left': 0.03,
+                'left2': 0.04,
+                'right': 0.03,
+                'right2': 0.04
+            };
+            
+            let earned = rates[position] || 0.03;
+            adRevenue += earned;
+            updateRevenue();
+            
+            showNotification(`💰 +$${earned.toFixed(2)} from ad click!`);
+        }
+
+        // ===== DISCORD - CHAT SE TUJHE PAISA =====
+        function connectDiscord() {
+            showNotification('✅ Discord Connected! Now every chat earns you money!');
+            
+            // Simulate Discord earnings
+            setInterval(() => {
+                let earned = 0.05; // $0.05 per message
+                discordRevenue += earned;
+                updateRevenue();
+                
+                // Add to chat feed
+                addChatMessage();
+                
+                showNotification(`💬 +$${earned.toFixed(2)} from Discord chat!`);
+            }, 30000); // Every 30 seconds
+        }
+
+        // Chat feed
+        function addChatMessage() {
+            const feed = document.getElementById('chatFeed');
+            const usernames = ['Rahul', 'Priya', 'Amit', 'Neha', 'Rev', 'Raj'];
+            const messages = ['Nice!', 'Thanks', 'Working', 'Great', 'Awesome', '🔥'];
             
             const randomUser = usernames[Math.floor(Math.random() * usernames.length)];
             const randomMsg = messages[Math.floor(Math.random() * messages.length)];
             
-            addChatMessage(randomUser, randomMsg);
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'chat-message';
+            msgDiv.innerHTML = `
+                <div>${randomUser}: ${randomMsg}</div>
+                <div class="chat-earned">+$0.05</div>
+            `;
             
-            // Update total chats
-            discordMessages.push({ user: randomUser, time: Date.now() });
-            localStorage.setItem('discordMessages', JSON.stringify(discordMessages));
+            feed.insertBefore(msgDiv, feed.firstChild);
             
-            const newTotal = discordMessages.length * 0.20;
-            document.getElementById('totalEarned').textContent = '$' + newTotal.toFixed(2);
-        }, 8000);
-
-        // Connect Discord
-        function connectDiscord() {
-            if (!currentUser) {
-                showNotification('🔐 Login first!');
-                showModal('login');
-                return;
+            // Update counters
+            let total = parseInt(document.getElementById('totalMessages').textContent) + 1;
+            document.getElementById('totalMessages').textContent = total;
+            document.getElementById('yourEarnings').textContent = '$' + discordRevenue.toFixed(2);
+            
+            if (feed.children.length > 10) {
+                feed.removeChild(feed.lastChild);
             }
-            showModal('discord');
-        }
-
-        function joinDiscord() {
-            showNotification('✅ Discord connected! Start chatting to earn $0.20 per message');
-            closeModals();
-            
-            // Start tracking user messages
-            if (currentUser) {
-                setInterval(() => {
-                    // Simulate user chatting
-                    if (Math.random() > 0.7) {
-                        const earned = (parseFloat(localStorage.getItem(`earned_${currentUser.username}`)) || 0) + 0.20;
-                        localStorage.setItem(`earned_${currentUser.username}`, earned);
-                        
-                        const wallet = parseFloat(localStorage.getItem(`wallet_${currentUser.username}`)) || 0;
-                        localStorage.setItem(`wallet_${currentUser.username}`, wallet + 0.20);
-                        
-                        updateUserStats();
-                        showNotification('💬 +$0.20 earned from chat!');
-                    }
-                }, 30000); // Every 30 seconds
-            }
-        }
-
-        // Update user stats
-        function updateUserStats() {
-            if (!currentUser) return;
-            
-            const earned = parseFloat(localStorage.getItem(`earned_${currentUser.username}`)) || 0;
-            const wallet = parseFloat(localStorage.getItem(`wallet_${currentUser.username}`)) || 0;
-            const messages = Math.floor(earned / 0.20);
-            
-            document.getElementById('userMessages').textContent = messages;
-            document.getElementById('userEarnings').textContent = '$' + earned.toFixed(2);
-            document.getElementById('walletBalance').textContent = '$' + wallet.toFixed(2);
-            document.getElementById('availableBalance').textContent = '$' + wallet.toFixed(2);
-            document.getElementById('totalEarnedWallet').textContent = '$' + earned.toFixed(2);
-            
-            // Random rank
-            const rank = Math.floor(Math.random() * 50) + 1;
-            document.getElementById('rankPosition').textContent = '#' + rank;
         }
 
         // Daily Bonus
         function claimDailyBonus() {
-            if (!currentUser) {
-                showNotification('🔐 Login first!');
-                return;
+            let bonus = 0.50;
+            discordRevenue += bonus;
+            updateRevenue();
+            showNotification(`🎁 +$${bonus} Daily Bonus claimed!`);
+        }
+
+        // Buy products
+        function buy(name, price) {
+            if (totalRevenue >= price) {
+                totalRevenue -= price;
+                updateRevenue();
+                showNotification(`✅ Purchased ${name}!`);
+            } else {
+                showNotification('❌ Insufficient balance. Earn more from Discord/Ads!');
             }
-            
-            const lastClaim = localStorage.getItem(`bonus_${currentUser.username}`);
-            const today = new Date().toDateString();
-            
-            if (lastClaim === today) {
-                showNotification('❌ Already claimed today!');
-                return;
-            }
-            
-            const bonus = 0.50;
-            const wallet = parseFloat(localStorage.getItem(`wallet_${currentUser.username}`)) || 0;
-            localStorage.setItem(`wallet_${currentUser.username}`, wallet + bonus);
-            localStorage.setItem(`bonus_${currentUser.username}`, today);
-            
-            updateUserStats();
-            showNotification(`✅ Daily bonus $${bonus} claimed!`);
         }
 
         // Withdraw
         function withdraw() {
-            if (!currentUser) {
-                showNotification('🔐 Login first!');
-                return;
-            }
-            
-            const wallet = parseFloat(localStorage.getItem(`wallet_${currentUser.username}`)) || 0;
-            
-            if (wallet < 5) {
-                showNotification('❌ Minimum withdrawal $5');
-                return;
-            }
-            
-            showNotification(`✅ Withdrawal request sent for $${wallet.toFixed(2)} to LTC`);
-            localStorage.setItem(`wallet_${currentUser.username}`, 0);
-            updateUserStats();
-        }
-
-        // Login/Register
-        function showModal(type) {
-            document.getElementById(type + 'Modal').classList.add('active');
-        }
-
-        function closeModals() {
-            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
-        }
-
-        function login() {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            const user = users.find(u => u.username === username && u.password === password);
-            
-            if (user) {
-                currentUser = user;
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                document.getElementById('userInfo').style.display = 'flex';
-                document.getElementById('userName').textContent = username;
-                closeModals();
-                updateUserStats();
-                showNotification('✅ Login successful!');
+            if (totalRevenue >= 5) {
+                showNotification(`✅ Withdrawal request sent for $${totalRevenue.toFixed(2)} to LTC: LLoHyp4sNLZMJ8Dof2KMkRMDvERof6idz8`);
+                totalRevenue = 0;
+                adRevenue = 0;
+                discordRevenue = 0;
+                updateRevenue();
             } else {
-                showNotification('❌ Invalid credentials');
+                showNotification('❌ Minimum withdrawal $5');
             }
         }
 
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            document.getElementById('userInfo').style.display = 'none';
-            showNotification('👋 Logged out');
-        }
-
-        // Cart
-        function addToCart(id, name, price) {
-            if (!currentUser) {
-                showNotification('🔐 Login first!');
-                return;
-            }
-            showNotification(`✅ ${name} added to cart!`);
-        }
-
-        // Notification
+        // Show notification
         function showNotification(message) {
             const notif = document.createElement('div');
             notif.className = 'notification';
@@ -989,19 +691,20 @@
             setTimeout(() => notif.remove(), 3000);
         }
 
-        // Check login
-        const savedUser = localStorage.getItem('currentUser');
-        if (savedUser) {
-            currentUser = JSON.parse(savedUser);
-            document.getElementById('userInfo').style.display = 'flex';
-            document.getElementById('userName').textContent = currentUser.username;
-            updateUserStats();
-        }
+        // Initialize
+        updateRevenue();
+        document.getElementById('totalMessages').textContent = Math.floor(Math.random() * 1000) + 500;
+        document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 50) + 20;
+
+        // Simulate other users chatting
+        setInterval(() => {
+            addChatMessage();
+        }, 15000);
     </script>
 
-    <!-- Floating LTC Badge -->
-    <div style="position: fixed; bottom: 20px; left: 20px; background: linear-gradient(135deg, #4a8aca, #5aa9ff); color: white; padding: 12px 25px; border-radius: 60px; font-weight: 600; z-index: 9999;">
-        ⚡ LTC: LLoHyp4sNLZMJ8Dof2KMkRMDvERof6idz8
+    <!-- LTC Address -->
+    <div style="position: fixed; bottom: 20px; left: 20px; background: #000; color: #ffd700; padding: 10px 20px; border-radius: 60px; font-size: 0.9rem; border: 2px solid #ffd700;">
+        LTC: LLoHyp4sNLZMJ8Dof2KMkRMDvERof6idz8
     </div>
 </body>
 </html>
